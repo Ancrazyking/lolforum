@@ -7,8 +7,8 @@
     -->
     <!--<meta http-equiv="X-UA-Compatible" content="ie=edge">-->
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <script src="/static/js/jquery-1.11.3.min.js"></script>
-    <script src="/static/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.js"></script>
     <title>英雄基本信息</title>
     <style>
         .thumbnail h3 {
@@ -29,8 +29,6 @@
 
     </style>
 
-
-    <script type="text/javascript" src="/static/js/jquery-1.11.3.min.js"></script>
     <script>
         $(function () {
             $.ajax({
@@ -41,7 +39,8 @@
                                var heroObj = JSON.parse(result);*/
                         for (var i = 0; i < heroObj.length; i++)
                         {
-                            $('<div class="col-xs-6 col-md-3 list"><a href="javascript:;" class="thumbnail"><img src="/lol/' + heroObj[i].icon + '" alt=""><h3>' + heroObj[i].hero_name + '</h3></a></div>').appendTo('.row');
+                            $('<div class="col-xs-6 col-md-3 list"><a href="javascript:;" class="thumbnail"><img src="/lol/'
+                                + heroObj[i].icon + '" alt=""><h3>' + heroObj[i].hero_name + '</h3></a></div>').appendTo('.row');
                         }
                     }
                 }
@@ -50,21 +49,22 @@
 
 
         //点击向服务器发送Ajax请求
-        $('.row').on("click", 'a', function () {
+        $('.row').click(function () {
                 $.ajax({
                     url: "/lol/hero.do",
-                    data: "id=" + $(this).find('h3').html(),
-                    type: "POST",
-                    success: function (result) {
-                        var hero = JSON.parse(result);
+                    data: "hero_name=" + $(this).find('h3').html(),
+                    success: function (hero) {
+                        console.log(hero.hero_name);
+                        console.log(hero.hero_title);
                         $('.hero_name').html(hero.hero_name);
                         $('.hero_title').html(hero.hero_title);
                         $('.hero_tags').html(hero.hero_tags);
                         $('.hero_info').html(hero.hero_info);
                         $('.modal-body').find('img').attr('src', hero.icon);
+                        $('.modal').modal('show');
+
                     }
                 });
-                $('.modal').modal('show');
             }
         );
     </script>
@@ -79,7 +79,7 @@
 </div>
 
 
-<!--<div class="modal fade" tabindex="-1" role="dialog">
+<div class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -94,14 +94,14 @@
                     <span class="hero_title"></span>
                 </h1>
                 <img src="" alt="">
-                &lt;!&ndash;&ndash;&gt;
+                <!---->
                 <p class="hero_tags"></p>
                 <p class="hero_info"></p>
                 <a href="javascript:;" class="btn btn-primary btn-lg"></a>
             </div>
         </div>
     </div>
-</div>-->
+</div>
 
 
 </body>

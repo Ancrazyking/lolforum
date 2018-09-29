@@ -8,6 +8,6 @@ public interface HeroService
 {
     String selectAllHero();
 
-    String selectHeroById(Integer id);
+    String selectHeroByHeroName(String heroName);
 
 }

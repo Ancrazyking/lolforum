@@ -29,10 +29,11 @@ public class HeroServiceImpl implements HeroService
         return heroListJsonStr;
     }
 
-    public String selectHeroById(Integer id)
+    public String selectHeroByHeroName(String heroName)
     {
-        Hero hero = heroDao.selectHeroById(id);
+        Hero hero = heroDao.selectHeroByHeroName(heroName);
         String heroJsonStr = JSON.toJSONString(hero);
+        System.out.println(heroJsonStr);
         return heroJsonStr;
     }
 }

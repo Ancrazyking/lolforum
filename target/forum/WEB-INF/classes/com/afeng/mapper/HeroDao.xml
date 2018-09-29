@@ -6,11 +6,11 @@
         FROM loljson
     </select>
 
-    <select id="selectHeroById" parameterType="Integer" resultType="Hero">
+
+    <select id="selectHeroByHeroName" parameterType="String" resultType="Hero">
         SELECT *
         FROM loljson
-        WHERE id = #{id}
-
+        WHERE hero_name = #{heroName}
     </select>
 
 </mapper>
