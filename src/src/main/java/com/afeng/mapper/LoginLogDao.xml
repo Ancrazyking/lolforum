@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afeng.mapper.LoginLogDao">
+
+    <insert id="insertLoginLog" parameterType="LoginLog">
+        INSERT INTO login_log (user_id, login_time, ip, device)
+        VALUES (#{user_id}, #{login_time}, #{ip}, #{device})
+    </insert>
+</mapper>
