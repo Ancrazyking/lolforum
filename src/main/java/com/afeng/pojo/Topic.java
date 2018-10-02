@@ -34,6 +34,10 @@ public class Topic extends BasePojo
     //关联的标签id
     private Byte tab_id;
 
+
+    private String formatCreateTime;
+    private String formatUpdateTime;
+
     public User getUser()
     {
         return user;

@@ -1,4 +1,172 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.afeng.mapper.TopicDao">
+
+    <!--主题基本结果集-->
+    <resultMap id="BaseResultMap" type="com.afeng.pojo.Topic">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result column="user_id" property="user_id" jdbcType="INTEGER"/>
+        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="click" property="click" jdbcType="INTEGER"/>
+        <result column="tab_id" property="tab_id" jdbcType="TINYINT"/>
+    </resultMap>
+
+
+    <!--主题基本结果集+主题内容  用于显示主题详情-->
+    <resultMap id="ResultMapWithContent" type="com.afeng.pojo.Topic" extends="BaseResultMap">
+        <result column="content" property="content" jdbcType="LONGVARCHAR"></result>
+    </resultMap>
+
+
+    <!--表连接映射  主题表和用户信息结果集  用于首页的显示-->
+    <resultMap id="topicAndUserInfo" type="com.afeng.pojo.Topic">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="user_id" jdbcType="INTEGER"/>
+        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="click" property="click" jdbcType="INTEGER"/>
+        <result column="tab_id" property="tab_id" jdbcType="TINYINT"/>
+        <!--列里是没有的,可以用as作为别名-->
+        <result column="count_replies" property="totalReplies" jdbcType="INTEGER"/>
+        <!--用户表连接-->
+        <association property="user" javaType="com.afeng.pojo.User">
+            <id column="id" property="id" jdbcType="INTEGER"/>
+            <result column="username" property="username" jdbcType="VARCHAR"/>
+            <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+        </association>
+        <!--标签表连接-->
+        <association property="tab" javaType="com.afeng.pojo.Tab">
+            <id column="id" property="id" jdbcType="INTEGER"/>
+            <result column="tab_name" property="tab_name" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+
+    <!--主题详情及用户必要信息 用于主题详情页-->
+    <resultMap id="topicAndUserDetail" type="com.afeng.pojo.Topic">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="user_id" jdbcType="INTEGER"/>
+        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="LONGVARCHAR"/>
+        <result column="click" property="click" jdbcType="INTEGER"/>
+        <result column="tab_id" property="tab_id" jdbcType="TINYINT"/>
+        <!--关联用户表  连接查询-->
+        <association property="user" javaType="com.afeng.pojo.User">
+            <id column="id" property="id" jdbcType="INTEGER"/>
+            <result column="username" property="username" jdbcType="VARCHAR"/>
+            <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <!--最多评论主题列表映射-->
+    <resultMap id="mostCommentsTopic" type="com.afeng.pojo.Topic">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="count_replies" property="totalReplies" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+
+    <!--连接查询,四表连查  user  topic  tab  reply-->
+    <!--主要用于显示主页-->
+    <select id="listTopicsAndUsers" resultMap="topicAndUserInfo">
+        SELECT
+            topic.id,
+            topic.user_id,
+            topic.create_time,
+            topic.update_time,
+            topic.title,
+            topic.click,
+            topic.tab_id,
+            user.username,
+            user.avatar,
+            tab.tab_name,
+            count(reply.id) AS count_replies
+        FROM topic
+            LEFT JOIN user ON topic.user_id = user.id
+            LEFT JOIN tab ON topic.tab_id = tab.id
+            LEFT JOIN reply ON topic.id = reply.topic_id
+        GROUP BY topic.id
+        ORDER BY topic.id DESC
+    </select>
+
+    <!--按照每个标签进行的分栏-->
+    <select id="listTopicsAndUsersOfTab" parameterType="Integer" resultMap="topicAndUserInfo">
+        SELECT
+            topic.id,
+            topic.user_id,
+            topic.create_time,
+            topic.update_time,
+            topic.title,
+            topic.click,
+            topic.tab_id,
+            user.username,
+            user.avatar,
+            tab.tab_name,
+            count(reply.id) AS count_replies
+        FROM topic
+            LEFT JOIN user ON topic.user_id = user.id
+            LEFT JOIN tab ON topic.tab_id = tab.id
+            LEFT JOIN reply ON topic.id = reply.topic_id
+        WHERE tab.id = #{id}
+        GROUP BY topic.id
+        ORDER BY topic.id DESC
+    </select>
+
+
+    <!--通过话题id查找单个话题和用户信息-->
+    <select id="selectTopicById" parameterType="Integer" resultMap="topicAndUserInfo">
+        SELECT
+            topic.*,
+            user.username,
+            user.avatar
+        FROM topic, user
+        WHERE topic.user_id = user.id AND topic.id = #{id}
+    </select>
+
+
+    <select id="selectAllTopics" resultType="Topic">
+        SELECT *
+        FROM topic
+        ORDER BY id DESC
+    </select>
+
+
+    <select id="totalTopicsCount" resultType="Integer">
+        SELECT count(*)
+        FROM topic
+    </select>
+
+    <!--查询评论最多的前5名话题-->
+    <select id="listMostCommentsTopics" resultMap="mostCommentsTopic">
+        SELECT
+            topic.id,
+            topic.title,
+            count(reply.id) AS count_replies
+        FROM topic, reply
+        WHERE topic.id = reply.topic_id
+        GROUP BY topic.id
+        ORDER BY count_replies DESC
+        LIMIT 0, 5;
+    </select>
+
+    <!--用户发布新话题-->
+    <insert id="insertTopic" parameterType="Topic">
+        INSERT INTO topic (user_id, create_time, update_time, title, tab_id.content)
+        VALUES (#{user_id}, #{create_time}, #{update_time}, #{title}, #{tab_id}, #{content})
+    </insert>
+
+    <!--用户点击,点击量会加一-->
+    <update id="clickAddOne" parameterType="Integer">
+        UPDATE topic
+        SET
+            click = click + 1
+        WHERE id = #{id}
+    </update>
+
+
 </mapper>

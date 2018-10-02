@@ -63,6 +63,8 @@
     </style>
 </head>
 <body>
+
+
 <!--引入header文件-->
 <%@include file="header.jsp" %>
 
@@ -79,19 +81,19 @@
             <li class="list-group-item">
                 <div style="height: 50px">
                     <div style="float: left;width: 6%;margin-bottom: 5px">
-                        <img width="50px" height="50px" src="${topic.user.avatar}" class="img-rounded">
+                        <img width="50px" height="50px" src="/static/${topic.user.avatar}" class="img-rounded">
                     </div>
 
                     <div style="width: 89%;float: left">
-                        <a href="/tab/${topic.id}">${topic.title}</a><br/>
+                        <a href="/topic/${topic.id}">${topic.title}</a><br/>
                         <div>
                             <a><span class="label label-default">${topic.tab.tab_name}</span></a>&nbsp;&nbsp;&nbsp;
                             <a href="/user/${topic.user.username}"><span><strong>${topic.user.username}</strong></span></a>&nbsp;&nbsp;
-                            <small class="text-muted">${topic.localCreateTime}</small>
+                            <small class="text-muted">${topic.formatCreateTime}</small>
                         </div>
                     </div>
                     <div style="width: 5%;float: right;text-align: center">
-                        <span class="badge">${topic.countReplies}</span>
+                        <span class="badge">${topic.totalReplies}</span>
                     </div>
                 </div>
             </li>

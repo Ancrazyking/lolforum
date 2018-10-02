@@ -9,7 +9,7 @@
 <html>
 <head>
     <META CHARSET="UTF-8">
-    <title>404 Not Found!</title>
+    <title>(:404 Not Found:)</title>
     <style>
         ::-moz-selection {
             background: #b3d4fc;

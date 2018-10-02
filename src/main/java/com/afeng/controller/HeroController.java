@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author afeng
@@ -25,7 +26,7 @@ public class HeroController
     //@ResponseBody默认编码为ISO-8859-1
     @ResponseBody
     @RequestMapping(value = "/heroList", produces = "application/json;charset=utf-8")
-    public String heroList()
+    public String heroList(ModelAndView mav)
     {
         String jsonStr = heroService.selectAllHero();
         System.out.println(jsonStr);
@@ -39,12 +40,18 @@ public class HeroController
      */
     @ResponseBody
     @RequestMapping(value = "/hero", produces = "application/json;charset=utf-8")
-    public String hero(@RequestParam("hero_name") String heroName)
+    public String hero(@RequestParam("hero_name") String heroName,ModelAndView mav)
     {
         String jsonStr = heroService.selectHeroByHeroName(heroName);
         System.out.println(heroName);
         return jsonStr;
     }
+
+    @RequestMapping("/heroInfo")
+    public String hero(){
+        return "hero";
+    }
+
 
     @RequestMapping("/test")
     public void test(String username)

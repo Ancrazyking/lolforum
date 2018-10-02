@@ -13,7 +13,7 @@
         <div class="panel-heading" style="background-color: white;text-align: center">
             <blockquote>
                 lol论坛
-                <small>一个分享lol技术的论坛</small>
+                <small>分享lol技术的论坛</small>
             </blockquote>
         </div>
         <ul class="list-group" style="width: 100%">

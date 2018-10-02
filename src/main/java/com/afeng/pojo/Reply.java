@@ -23,7 +23,8 @@ public class Reply extends BasePojo
     private Date create_time;
     private Date update_time;
     private String device;
-
+    private String formatCreateTime;
+    private String formatUpdateTime;
 
     public User getUser()
     {
@@ -105,14 +106,14 @@ public class Reply extends BasePojo
         this.device = device == null ? null : device.trim();
     }
 
-    public String getLocalCreateTime()
+    public String getFormatCreateTime()
     {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         String date = df.format(this.create_time);
         return date;
     }
 
-    public String getLocalUpdateTime()
+    public String getFormatUpdateTime()
     {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         String date = df.format(update_time);

@@ -83,7 +83,10 @@
         <p style="text-align:center;font-size: 16px ">友情链接</p>
         <ul>
             <li style="text-align: center">
-                <a href="https://github.com/" style="text-decoration: none;">Gitub</a>
+                <a href="https://github.com/" style="text-decoration: none;">Github</a>
+            </li>
+            <li style="text-align: center">
+                <a href="https://www.pornhub.com">Pornhub</a>
             </li>
             <li style="text-align: center">
                 <a href="https://gitee.com/" style="text-decoration: none">Gitee</a>

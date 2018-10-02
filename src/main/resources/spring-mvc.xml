@@ -21,16 +21,13 @@
 
     <!--设置配置方案 -->
 
-
     <aop:aspectj-autoproxy/>
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
-
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="suffix" value="/WEB-INF/jsp"></property>
-        <property name="prefix" value=".jsp"></property>
+        <property name="suffix" value=".jsp"></property>
+        <property name="prefix" value="/WEB-INF/jsp/"></property>
     </bean>
-
 
     <bean id="jsonHttpMessageConverter"
           class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
@@ -71,9 +68,11 @@
 
 
     <!-- 配置静态资源,对静态资源放行 -->
-    <mvc:resources location="/static/img/" mapping="/img/**"/>
-    <mvc:resources location="/static/js/" mapping="/js/**"/>
-    <mvc:resources location="/static/css/" mapping="/css/**"/>
+    <mvc:resources location="/static/img/avatar/" mapping="/static/img/avatar/**"/>
+    <mvc:resources location="/static/js/" mapping="/static/js/**"/>
+    <mvc:resources location="/static/css/" mapping="/static/css/**"/>
+    <mvc:resources mapping="/lol/**" location="/lol/"></mvc:resources>
+    <mvc:resources mapping="/static/jsh/**" location="/static/jsh/"/>
 
 
 </beans>
