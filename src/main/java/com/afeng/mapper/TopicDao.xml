@@ -151,12 +151,12 @@
         WHERE topic.id = reply.topic_id
         GROUP BY topic.id
         ORDER BY count_replies DESC
-        LIMIT 0, 5;
+        LIMIT 0, 10
     </select>
 
-    <!--用户发布新话题-->
+    <!--用户发布新话题,需要用户id,话题标签id-->
     <insert id="insertTopic" parameterType="Topic">
-        INSERT INTO topic (user_id, create_time, update_time, title, tab_id.content)
+        INSERT INTO topic (user_id, create_time, update_time, title, tab_id, content)
         VALUES (#{user_id}, #{create_time}, #{update_time}, #{title}, #{tab_id}, #{content})
     </insert>
 

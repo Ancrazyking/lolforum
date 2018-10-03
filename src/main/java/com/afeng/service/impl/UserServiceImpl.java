@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService
         if (result)
         {
             User loginUser = userDao.selectUserByUsername(username);
-            if (loginUser.getEmail().equals(password))
+            if (loginUser.getPassword().equals(password))
             {
                 //用户名和密码验证成功
                 return 2;

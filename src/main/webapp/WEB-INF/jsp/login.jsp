@@ -150,7 +150,8 @@
     //设置登录的信息
     setLoginStatus();
 
-    //用户点击登录时触发
+    //用户点击登录时触发,发送ajax请求
+    //数据交互使用json
     $('#loginBtn').click(function () {
         var userName = $('#username').val();
         var passWord = $('#password').val();
@@ -171,7 +172,7 @@
             $.ajax(
                 {
                     type: "POST",
-                    url: "/user/loginCheck.do",
+                    url: "/user/login",
                     data: {
                         username: userName,
                         password: passWord
@@ -207,6 +208,4 @@
 </script>
 
 </body>
-
-
 </html>

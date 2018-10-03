@@ -8,14 +8,19 @@ import com.afeng.service.ReplyService;
 import com.afeng.service.TabService;
 import com.afeng.service.TopicService;
 import com.afeng.service.UserService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +32,8 @@ import java.util.List;
 @Controller
 public class TopicController
 {
+    //log4j对象,??
+    private final Log log = LogFactory.getLog(getClass());
     @Autowired
     private TopicService topicService;
     @Autowired
@@ -117,7 +124,14 @@ public class TopicController
 
     }
 
-
+    /**
+     * tab分类
+     * 不同分类板块下相同标签的话题列表
+     *
+     * @param tabNameEn
+     * @param session
+     * @return
+     */
     @RequestMapping("/tab/{tabNameEn}")
     public ModelAndView tabPage(@PathVariable("tabNameEn") String tabNameEn, HttpSession session)
     {
@@ -143,6 +157,7 @@ public class TopicController
 
 
         //最热主题
+        //评论(回复数)最多的话题
         List<Topic> hotestTopics = topicService.listMostCommentsTopics();
 
 
@@ -154,8 +169,59 @@ public class TopicController
         tabIndexPage.addObject("hotestTopics", hotestTopics);
         return tabIndexPage;
 
-
     }
 
+
+    /**
+     * 用户发布主题
+     *
+     * @param request
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/topic/add", method = RequestMethod.POST)
+    public ModelAndView addTopic(HttpServletRequest request, HttpSession session)
+    {
+        ModelAndView homePage;
+        //未登录,如果用户直接在浏览器地址栏输入/topic/add则重定向到登录页面
+        if (session.getAttribute("userId") == null)
+        {
+            homePage = new ModelAndView("redirect:/login");
+            return homePage;
+        }
+
+        //处理传入的参数
+        Integer userId = (Integer) session.getAttribute("userId");
+        String title = request.getParameter("title");
+        String content = request.getParameter("content");
+        Byte tabId = Byte.parseByte(request.getParameter("tab"));
+
+
+        //新建主题POJO
+        Topic topic = new Topic();
+        topic.setUser_id(userId);
+        topic.setTitle(title);
+        topic.setContent(content);
+        topic.setTab_id(tabId);
+        topic.setCreate_time(new Date());
+        topic.setUpdate_time(new Date());
+
+
+        //添加一条话题
+        boolean resultT = topicService.addTopic(topic);
+        //用户发布一条话题则该用户的积分+1
+        boolean resultC = userService.addCredit(1, userId);
+
+        if (resultT)
+        {
+            if (log.isInfoEnabled())
+            {
+                log.info("添加主题成功!");
+            }
+        }
+
+        homePage = new ModelAndView("redirect:/");
+        return homePage;
+    }
 
 }

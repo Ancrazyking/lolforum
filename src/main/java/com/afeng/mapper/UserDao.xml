@@ -9,11 +9,10 @@
     </select>
 
 
-    <select id="selectUserByUsername" resultType="String" parameterType="User">
+    <select id="selectUserByUsername" resultType="User" parameterType="String">
         SELECT *
         FROM user
-        WHERE user_name = #{username}
-
+        WHERE username = #{username}
     </select>
 
 
@@ -27,7 +26,7 @@
     <select id="existUsername" parameterType="String" resultType="Integer">
         SELECT count(*)
         FROM user
-        WHERE user_name = #{username}
+        WHERE username = #{username}
 
     </select>
 
@@ -64,9 +63,6 @@
         SET credit = credit + #{points}
         WHERE id = #{id}
     </update>
-
-
-
 
 
 </mapper>

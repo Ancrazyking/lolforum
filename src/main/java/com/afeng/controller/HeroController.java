@@ -47,10 +47,18 @@ public class HeroController
         return jsonStr;
     }
 
-    @RequestMapping("/heroInfo")
+ /*   @RequestMapping("/heroInfo")
     public String hero(){
         return "hero";
+    }*/
+
+
+    @RequestMapping("/heroInfo")
+    public ModelAndView hero(){
+        ModelAndView hero=new ModelAndView("hero");
+        return hero;
     }
+
 
 
     @RequestMapping("/test")

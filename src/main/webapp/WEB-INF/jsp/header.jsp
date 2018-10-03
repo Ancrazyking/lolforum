@@ -32,10 +32,10 @@
                     <!--未登陆-->
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <p class="navbar-text"><a href="/signin">登录</a></p>
+                            <p class="navbar-text"><a href="/login">登录</a></p>
                         </li>
                         <li>
-                            <p class="navbar-text"><a href="/signup">注册</a></p>
+                            <p class="navbar-text"><a href="/register">注册</a></p>
                         </li>
                     </ul>
                 </c:if>
@@ -53,7 +53,7 @@
                             <p class="navbar-text"><a href="/settings">设置</a></p>
                         </li>
                         <li>
-                            <p class="navbar-text"><a href="javascript:signout_confirm();">登出</a></p>
+                            <p class="navbar-text"><a href="javascript:signout_confirm();">退出</a></p>
                         </li>
                     </ul>
                 </c:if>
@@ -63,13 +63,14 @@
 
 
 </header>
+<!--脚本用于确认用户是否退出-->
 <script>
     function signout_confirm()
     {
         var r = confirm("确定退出?")
         if (r == true)
         {
-            window.location.href = "/signout";
+            window.location.href = "/user/logout";
         }
         else
         {

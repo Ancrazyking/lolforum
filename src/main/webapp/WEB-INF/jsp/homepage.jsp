@@ -4,6 +4,7 @@
   Date: 2018/9/29
   Time: 19:02
   To change this template use File | Settings | File Templates.
+  主页面
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -12,9 +13,10 @@
     <meta name="Content-Type" content="text/html;charset=utf-8">
     <meta name="keywords" content="lol forum,论坛,lol">
     <title>lol forum - 一个分享创造的爱好者社区</title>
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <script src="/static/js/jquery-3.2.1.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         li {
             list-style-type: none;

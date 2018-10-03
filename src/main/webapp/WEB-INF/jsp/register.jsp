@@ -69,27 +69,24 @@
     <div class="panel-heading" style="background-color: #fff">
         <h3 class="panel-title">注册</h3>
     </div>
-    <div class="panel-body">
-        <!--用户注册提交表单-->
-        <form action="/user/register.do" method="post" id="registerForm" class="form-horizontal" role="form"
-              style="margin-left: 5%">
 
+    <div class="panel-body">
+        <form action="/user/register" method="post" id="registerForm" class="form-horizontal" role="form"
+              style="margin-left: 5%">
             <div class="form-group">
                 <label class="col-sm-2 control-label">用户名</label>
-                <div class="col-sm-10" style="width: 40%">
+                <div class="col-sm-10" style="width: 40%;">
                     <input type="text" class="form-control" id="username" name="username" required="required">
-                    <p class="form-control-static">请使用字母a-z或数字0-9</p>
+                    <p class="form-control-static">请使用半角的 a-z 或数字 0-9</p>
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-2 control-label">密码</label>
                 <div class="col-sm-10" style="width: 40%;">
-                    <input type="password" class="form-control" id="password" required="required">
+                    <input type="password" class="form-control" id="password" name="password" required="required">
                 </div>
             </div>
-
-            <div class="form-control">
+            <div class="form-group">
                 <label class="col-sm-2 control-label">电子邮件</label>
                 <div class="col-sm-10" style="width: 40%;">
                     <input type="email" class="form-control" id="email" name="email" required="required">
@@ -110,16 +107,12 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">手机号</label>
                 <div class="col-sm-10" style="width: 40%;">
-                    <input type="tel" class="form-group" id="tel" name="tel" required="required">
+                    <input type="tel" class="form-control" id="tel" name="tel" required="required">
                 </div>
             </div>
-
-            <!--提交按钮-->
-            <input type="submit" class="btn btn-default" id="registerBtn" style="margin-left: 17%">
-
+            <input type="submit" class="btn btn-default" id="registerBtn" style="margin-left: 17%" value="注册">
         </form>
     </div>
-
 </div>
 
 
