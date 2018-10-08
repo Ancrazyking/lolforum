@@ -3,14 +3,14 @@
 <mapper namespace="com.afeng.mapper.HeroDao">
     <select id="selectAllHero" resultType="Hero">
         SELECT *
-        FROM loljson
+        FROM hero
     </select>
-
 
     <select id="selectHeroByHeroName" parameterType="String" resultType="Hero">
         SELECT *
-        FROM loljson
-        WHERE hero_name = #{heroName}
+        FROM hero
+        WHERE hero_name = #{hero_name}
+
     </select>
 
 </mapper>

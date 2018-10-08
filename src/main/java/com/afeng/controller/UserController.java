@@ -1,6 +1,7 @@
 package com.afeng.controller;
 
 import com.afeng.pojo.LoginLog;
+import com.afeng.pojo.Topic;
 import com.afeng.pojo.User;
 import com.afeng.service.LoginLogService;
 import com.afeng.service.TopicService;
@@ -9,14 +10,17 @@ import com.afeng.utils.MD5Utils;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.List;
 
 /**
  * @author afeng
@@ -160,6 +164,161 @@ public class UserController
             return request.getRemoteAddr();
         }
         return request.getHeader("x-forwarded-for");
+    }
+
+
+    /**
+     * 用户主页
+     *
+     * @param username
+     * @param session
+     * @return
+     */
+    @RequestMapping("/user/{username}")
+    public ModelAndView userHomePage(@PathVariable("username") String username, HttpSession session)
+    {
+
+        boolean ifExistUser = userService.existUsername(username);
+
+        //获取统计信息
+        int topicsNum = topicService.getTopicsNum();
+        int usersNum = userService.totalUserCount();
+
+
+        //获取用户的信息
+        Integer userId = (Integer) session.getAttribute("userId");
+        User user = userService.getUserById(userId);
+
+        //最热主题
+        List<Topic> hotestTopics = topicService.listMostCommentsTopics();
+
+        ModelAndView userHomePage = new ModelAndView("userhomepage");
+        userHomePage.addObject("hotestTopics", hotestTopics);
+        if (ifExistUser)
+        {
+            User resultUser = userService.getUserByUsername(username);
+            userHomePage.addObject("userInfo", resultUser);
+            userHomePage.addObject("topicsNum", topicsNum);
+            userHomePage.addObject("usersNum", usersNum);
+            userHomePage.addObject("user", user);
+            return userHomePage;
+
+
+        } else
+        {
+            String errorInfo = "该用户未找到!";
+            userHomePage.addObject("errorInfo", errorInfo);
+            return userHomePage;
+        }
+    }
+
+    /**
+     * 用户设置
+     *
+     * @param session
+     * @return
+     */
+    @RequestMapping("/user/settings")
+    public ModelAndView userSettings(HttpSession session)
+    {
+        Integer userId = (Integer) session.getAttribute("userId");
+        User user = userService.getUserById(userId);
+
+        //获取最热主题
+        List<Topic> hotestTopics = topicService.listMostCommentsTopics();
+
+
+        ModelAndView userSettings = new ModelAndView("usersettings");
+
+        userSettings.addObject("user", user);
+        userSettings.addObject("hotestTopics", hotestTopics);
+        return userSettings;
+    }
+
+    /**
+     * 用户设置点击更换头像按钮头像
+     *
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/user/settings/avatar", method = RequestMethod.GET)
+    public ModelAndView userSettingsAvatar(HttpSession session)
+    {
+        Integer userId = (Integer) session.getAttribute("userId");
+        User user = userService.getUserById(userId);
+
+        //最热主题
+        List<Topic> hotestTopics = topicService.listMostCommentsTopics();
+
+        ModelAndView userUpdateAvatar = new ModelAndView("userupdateavatar");
+        userUpdateAvatar.addObject("user", user);
+        userUpdateAvatar.addObject("hotestTopics", hotestTopics);
+        return userUpdateAvatar;
+    }
+
+
+    /**
+     * 用户设置头像更新
+     * 文件上传
+     *
+     * @param avatarFile
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/user/settings/avatar/update", method = RequestMethod.POST)
+    public ModelAndView userUpdateAvatar(@RequestPart("avatar") MultipartFile avatarFile, HttpSession session)
+    {
+
+        Integer userId = (Integer) session.getAttribute("userId");
+        User user = userService.getUserById(userId);
+
+        String fileName = avatarFile.getOriginalFilename();
+        System.out.println(fileName);
+        //得到文件的后缀名
+        String suffix = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+        //建立时间戳
+        Long date = new Date().getTime();
+        //设置新的文件名
+        String newFileName = date + "-" + userId + "." + suffix;
+        String absolutePath = session.getServletContext().getRealPath("/static/img/avatar") + "/" + newFileName;
+        String relativePath = "/img/avatar" + "/" + newFileName;
+        System.out.println(relativePath);
+        User u = new User();
+        u.setAvatar(relativePath);
+        u.setId(userId);
+        u.setUsername(user.getUsername());
+        u.setPassword(user.getPassword());
+        u.setCredit(user.getCredit());
+        u.setType(user.getType());
+        u.setPhone_num(user.getPhone_num());
+        u.setCreate_time(user.getCreate_time());
+        u.setUpdate_time(new Date());
+
+        //文件上传的绝对路径
+        /// static/img/avatar
+        File file = new File(absolutePath);
+
+        //上传文件
+        if (!file.exists())
+        {
+            try
+            {
+                avatarFile.transferTo(file);
+                userService.updateUser(u);
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        //最热主题
+        List<Topic> hotestTopics = topicService.listMostCommentsTopics();
+
+        ModelAndView userUpdateAvatar = new ModelAndView("userupdateavatar");
+        userUpdateAvatar.addObject("user", user);
+        userUpdateAvatar.addObject("hotestTopics", hotestTopics);
+        return userUpdateAvatar;
+
     }
 
 

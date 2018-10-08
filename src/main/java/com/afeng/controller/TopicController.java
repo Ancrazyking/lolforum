@@ -94,6 +94,10 @@ public class TopicController
         //该话题的详情
 
         Topic topic = topicService.selectById(id);
+        System.out.println("===================");
+        System.out.println(topic);
+        System.out.println("===================");
+
         //该话题的全部评论
         List<Reply> replies = replyService.getRepliesOfTopic(id);
         //获取所有的评论数

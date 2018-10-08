@@ -12,19 +12,19 @@
                 <!--向左对齐-->
                 <ul class="nav navbar-nav navbar-left">
                     <li>
-                        <a href="/lol/heroInfo">英雄介绍</a>
+                        <a href="/forum/lol/heroInfo">英雄介绍</a>
                     </li>
                     <li <c:if test="${tab.tab_name_en == 'tech'}">
                         class="active" </c:if>><a href="/tab/tech">技术</a>
                     </li>
                     <li <c:if test="${tab.tab_name_en == 'play'}">class="active"
-                    </c:if>><a href="/tab/play">好玩</a></li>
+                    </c:if>><a href="/forum/tab/play">好玩</a></li>
                     <li <c:if test="${tab.tab_name_en == 'creative'}">class="active"
-                    </c:if>><a href="/tab/creative">创意</a></li>
+                    </c:if>><a href="/forum/tab/creative">创意</a></li>
                     <li <c:if test="${tab.tab_name_en== 'jobs'}">class="active"
-                    </c:if>><a href="/tab/jobs">工作</a></li>
+                    </c:if>><a href="/forum/tab/jobs">工作</a></li>
                     <li <c:if test="${tab.tab_name_en == 'deals'}">class="active"
-                    </c:if>><a href="/tab/deals">交易</a></li>
+                    </c:if>><a href="/forum/tab/deals">交易</a></li>
 
                 </ul>
 
@@ -47,10 +47,10 @@
                         </li>
                         <li>
                             <p class="navbar-text"><a
-                                    href="/member/${sessionScope.username}">${sessionScope.username}</a></p>
+                                    href="/user/${sessionScope.username}">${sessionScope.username}</a></p>
                         </li>
                         <li>
-                            <p class="navbar-text"><a href="/settings">设置</a></p>
+                            <p class="navbar-text"><a href="/user/settings">设置</a></p>
                         </li>
                         <li>
                             <p class="navbar-text"><a href="javascript:signout_confirm();">退出</a></p>

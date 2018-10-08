@@ -17,6 +17,11 @@ public class User extends BasePojo
     private Date create_time;
     private Date update_time;
     private Integer credit;
+
+/*    private String formatCreateTime;
+    private String formatUpdateTime;*/
+
+
     //保存图片的字符串
     private String avatar;
     private Byte type;
